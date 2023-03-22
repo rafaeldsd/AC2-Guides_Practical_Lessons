@@ -1,4 +1,7 @@
 #include <detpic32.h>
+
+void delay(int ms);
+
 int main(void){
     TRISBbits.TRISB4 = 1;       // RB4 digital output disconnected
     AD1PCFGbits.PCFG4= 0;       // RB4 configured as analog input
@@ -18,7 +21,7 @@ int main(void){
         AD1CON1bits.ASAM = 1; // Start conversion
         while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
         int *p = (int *)(&ADC1BUF0);
-        int i, sum = 0;
+        int i, V, sum = 0;
         for( i = 0; i < 16; i++ ) {
             sum += p[i*4];
         }
@@ -26,7 +29,15 @@ int main(void){
         V = (sum * 33 + 511) / 1023;
         printInt( V, 16 | 3 << 16); // Read conversion result (ADC1BUF0 value) and print it
         putChar('\n');
-        IFS1bits.AD1IF = 0 // Reset AD1IF
+        delay(250); // 250 ms
+        IFS1bits.AD1IF = 0; // Reset AD1IF
     }
     return 0;
+}
+
+void delay(int ms){
+    for(; ms > 0; ms--){
+        resetCoreTimer();
+        while(readCoreTimer() < 20000);
+    }
 }

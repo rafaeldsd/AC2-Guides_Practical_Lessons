@@ -23,21 +23,21 @@ int main(void){
     // Configure RD5 to RD6 as outputs 
     TRISD = TRISD & 0xFF9F;
 
-    int i = 0;
     while(1){
-
+        int i = 0;
+        int V = 0;
         if(i == 0){ // 0, 200ms, 400ms, 600ms, ...
             AD1CON1bits.ASAM = 1; // Start conversion
             while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
             int *p = (int *)(&ADC1BUF0);
-            int i, sum = 0;
+            int sum = 0;
             for( i = 0; i < 16; i++ ) {
                 sum += p[i*4];
             }
             sum = sum / 4;
             // Convert voltage amplitude to decimal
             V = (sum * 33 + 511) / 1023;
-            IFS1bits.AD1IF = 0 // Reset AD1IF
+            IFS1bits.AD1IF = 0; // Reset AD1IF
         }
         send2displays(V); // Send voltage value to displays
         delay(10); // Wait 10 ms (using the core timer)
@@ -54,18 +54,23 @@ void delay(int ms){
 }
 
 void send2displays(unsigned char value){
-    static const char display7Scodes[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71};
-    static char displayFlag = 0;
+    static const char disp7Scodes[] = { 0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71 };
+    static char displayFlag = 0;    // static variable: doesn't loose its value between calls to function
+
     unsigned char digit_low = value & 0x0F;
     unsigned char digit_high = value >> 4;
+    // if "displayFlag" is 0 then send digit_low to display_low
     if(displayFlag == 0){
-        LATDbits.LATD5 = 0;
-        LATDbits.LATD6 = 1;
-        LATB = (LATB & 0x80FF) | (display7Scodes[digit_low] << 8);
-    }else{
         LATDbits.LATD5 = 1;
         LATDbits.LATD6 = 0;
-        LATB = (LATB & 0x80FF) | (display7Scodes[digit_high] << 8);
+        LATB = (LATB & 0x80FF) | (disp7Scodes[digit_low] << 8);
     }
+    // else send digit_high to display_high
+    else{
+        LATDbits.LATD5 = 0;
+        LATDbits.LATD6 = 1;
+        LATB = (LATB & 0x80FF) | (disp7Scodes[digit_high] << 8);
+    }
+    // toggle "displayFlag" variable
     displayFlag = !displayFlag;
 }

@@ -17,8 +17,9 @@ int main(void){
     while(1){
         AD1CON1bits.ASAM = 1; // Start conversion
         while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
-        printInt(ADC1BUF0, 16 | 3 << 16) // Read conversion result (ADC1BUF0 value) and print it
-        IFS1bits.AD1IF = 0 // Reset AD1IF
+        printInt(ADC1BUF0, 16 | 3 << 16); // Read conversion result (ADC1BUF0 value) and print it
+        putChar('\n');
+        IFS1bits.AD1IF = 0; // Reset AD1IF
     }
     return 0;
 }

@@ -18,11 +18,13 @@ int main(void){
         AD1CON1bits.ASAM = 1; // Start conversion
         while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
         int *p = (int *)(&ADC1BUF0); 
+        int i;
         for( i = 0; i < 16; i++ ) {
-            printInt( p[i*4], 16 | 3 << 16); // Read conversion result (ADC1BUF0 value) and print it
+            printInt( p[i*4], 10 | 4 << 16); // Read conversion result (ADC1BUF0 value) and print it
             putChar(' ');
         }
-        IFS1bits.AD1IF = 0 // Reset AD1IF
+        putChar('\n');
+        IFS1bits.AD1IF = 0; // Reset AD1IF
     }
     return 0;
 }

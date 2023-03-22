@@ -25,7 +25,10 @@ int main(void){
         while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
         LATDbits.LATD11 = 0;    // Reset LATD11 (LATD11=0)
         aux = ADC1BUF0;         // Read conversion result (ADC1BUF0) to "aux" variable
-        IFS1bits.AD1IF = 0      // Reset AD1IF (should be done after reading the conversion result)
+        printInt(aux, 16 | 3 << 16); // Read conversion result (ADC1BUF0 value) and print it
+        putChar('\n');
+        IFS1bits.AD1IF = 0;     // Reset AD1IF (should be done after reading the conversion result)
+
     }
     return 0;
 }
