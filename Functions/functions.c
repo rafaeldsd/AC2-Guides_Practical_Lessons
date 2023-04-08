@@ -13,21 +13,17 @@ void send2displays (unsigned char value){
     unsigned char dl = value & 0x0F;
     unsigned char dh = value >> 4;
 
-    if (displayFlag=0){
+    if(displayFlag == 0){
         LATDbits.LATD5 = 1;
         LATDbits.LATD6 = 0;
-        LATB= (LATB & 0x80FF) | (disp7Scodes[dl] << 8);
+        LATB = (LATB & 0x80FF) | (disp7Scodes[dl]<<8);
     }
     else{
         LATDbits.LATD5 = 0;
         LATDbits.LATD6 = 1;
-        LATB= (LATB & 0x80FF) | (disp7Scodes[dh] << 8);
+        LATB = (LATB & 0x80FF) | (disp7Scodes[dh]<<8);
     }
     displayFlag = !displayFlag;
-}
-
-unsigned char toBCD (unsigned char value){
-    return ((value / 10) << 4)+(value % 10);
 }
 
 // ADC

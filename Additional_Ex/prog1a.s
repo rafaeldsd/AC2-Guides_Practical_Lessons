@@ -23,7 +23,7 @@ main:
 while:
     # Read the value of the dip-switch
     lw      $t1, PORTB($t0)         # $t1 = PORTB
-    addi    $t1, $t1, 0x000F        # $t1 = $t1 + 0x000F
+    andi    $t1, $t1, 0x000F        # $t1 = $t1 + 0x000F
     # Write the value of the dip-switch to the LEDs
     lw      $t2, LATE($t0)          # $t2 = LATE
     andi    $t2, $t2, 0xFFF0        # $t2 = $t2 & 0xFFF0
