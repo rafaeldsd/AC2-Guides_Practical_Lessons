@@ -19,19 +19,19 @@ main:
 
     # Configuration of TRISB register (bit0=1 means INPUT)
     lw $t1, TRISB($t0)          # READ (Mem_addr = 0xBF880000 + 0x6104)
-    ori $t1, $t1, 0x1        # MODIFY (bit0=1 (1 means INPUT))
+    ori $t1, $t1, 0x0001        # MODIFY (bit0=1 (1 means INPUT))
     sw $t1, TRISB($t0)          # WRITE (Write TRISB register)
 
 # In infinite loop, read value from input port and write this value to output port (i.e., RE0 = RB0).
 loop:                          
     
     lw $t1, PORTB($t0)          # READ (Mem_addr = 0xBF880000 + 0x6050)
-    andi $t1, $t1, 1            # $t1 = RB0
+    andi $t1, $t1, 0x0001       # $t1 = RB0
     lw	$t2, LATE($t0)          # READ (Mem_addr = 0xBF880000 + 0x6120)
     andi	$t2, $t2, 0xFFFE    #  $t2 = RE0
     or	$t2, $t2, $t1           # $t2 = RE0 = RB0
     sw	$t2, LATE($t0)          # WRITE (Write LATE register)
-    j loop                    # Infinite loop
-    li $v0, 1                   # return 0
+    j loop                      # Infinite loop
+    li $v0, 0                   # return 0
     jr $ra                      # Exit program
 

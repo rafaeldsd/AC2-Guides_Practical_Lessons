@@ -33,6 +33,6 @@ loop:
     not $t2, $t2                # $t2 = RE0 = !RB0
     sw	$t2, LATE($t0)          # WRITE (Write LATE register)
     j loop                      # Infinite loop
-    li $v0, 1                   # return 0
+    li $v0, 0                   # return 0
     jr $ra                      # Exit program
 

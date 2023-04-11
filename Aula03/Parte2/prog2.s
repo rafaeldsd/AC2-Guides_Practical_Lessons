@@ -30,9 +30,9 @@ loop:
     or $t1, $t1, $s1            # OR with $s0
     sw $t1, LATE($t0)           # WRITE (Mem_addr = 0xBF880000 + 0x6120)
 
-    li $a0, 1000 
+    li $a0, 250 
     jal delay
-    addi $s1, $s1, 1
+    addi $s1, $s1, -1
     andi $s1, $s1, 0x001E
     j loop
 

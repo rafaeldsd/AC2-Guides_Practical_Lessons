@@ -4,6 +4,8 @@
     .equ TRISE, 0x6100          # TRISE address is 0xBF886100
     .equ PORTE, 0x6110          # PORTE address is 0xBF886110
     .equ LATE, 0x6120           # LATE address is 0xBF886120
+    .equ TRISB, 0x6040          # TRISB address is 0xBF886040
+    .equ PORTB, 0x6050          # PORTB address is 0xBF886050
     .data
     .text
     .globl main 
@@ -22,6 +24,10 @@ main:
     andi $t1, $t1, 0xFFE1       # Set bit4,bit3,bit2,bit1 as output
     sw $t1, TRISE($t0)          # WRITE (Mem_addr = 0xBF880000 + 0x6100)
 
+    lw $t1, TRISB($t0)          # READ (Mem_addr = 0xBF880000 + 0x6040)
+    ori $t1, $t1, 0x0002        # Set bit1 as input
+    sw $t1, TRISB($t0)          # WRITE (Mem_addr = 0xBF880000 + 0x6040)
+
     li $s1, 0                  # Initialize $s1 to 0
 
 loop:
@@ -30,10 +36,21 @@ loop:
     or $t1, $t1, $s1            # OR with $s0
     sw $t1, LATE($t0)           # WRITE (Mem_addr = 0xBF880000 + 0x6120)
 
-    li $a0, 1000 
+    li $a0, 333
     jal delay
-    addi $s1, $s1, 1
-    andi $s1, $s1, 0x001E
+
+    lw $t2, PORTB($t0)         # READ (Mem_addr = 0xBF880000 + 0x6000)
+    andi $t2, $t2, 0x0002      # read bit3
+
+if: beq $t2, $0, else
+    sll $s1, $s1, 1            # Shift $s1 left by 1
+    j endif
+
+else:
+    srl $s1, $s1, 1           # Shift $s1 right by 1
+    
+endif: 
+    andi $s1, $s1, 0x001E      # Clear bit4,bit3,bit2,bit1
     j loop
 
     # RESTORE REGISTERS

@@ -8,7 +8,7 @@ int main(void){
     AD1CON1bits.CLRASAM = 1;    // Stop conversions when the 1st A/D converter interrupt is generated. 
                                 // At the same time, hardware clears the ASAM bit
     AD1CON3bits.SAMC = 16;      // Sample time is 16 TAD (TAD = 100 ns)
-    AD1CON2bits.SMPI = 1-1;     // Interrupt is generated after N samples
+    AD1CON2bits.SMPI = 15-1;     // Interrupt is generated after N samples
                                 // (replace N by the desired number of consecutive samples)
     AD1CHSbits.CH0SA = 4;       // replace x(4) by the desired input
                                 // analog channel (0 to 15)

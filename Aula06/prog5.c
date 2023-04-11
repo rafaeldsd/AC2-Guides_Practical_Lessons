@@ -22,7 +22,7 @@ int main(void){
         while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
         int *p = (int *)(&ADC1BUF0);
         int i, V, sum = 0;
-        for( i = 0; i < 16; i++ ) {
+        for( i = 0; i < 4; i++ ) {
             sum += p[i*4];
         }
         sum = sum / 4;

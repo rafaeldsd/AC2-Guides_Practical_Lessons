@@ -1,4 +1,5 @@
 #include <detpic32.h>
+
 int main(void){
     TRISBbits.TRISB4 = 1;       // RB4 digital output disconnected
     AD1PCFGbits.PCFG4= 0;       // RB4 configured as analog input
@@ -19,7 +20,7 @@ int main(void){
         while( IFS1bits.AD1IF == 0 ); // Wait while conversion not done (AD1IF == 0)
         int *p = (int *)(&ADC1BUF0); 
         int i;
-        for( i = 0; i < 16; i++ ) {
+        for( i = 0; i < 4; i++ ) {
             printInt( p[i*4], 10 | 4 << 16); // Read conversion result (ADC1BUF0 value) and print it
             putChar(' ');
         }
