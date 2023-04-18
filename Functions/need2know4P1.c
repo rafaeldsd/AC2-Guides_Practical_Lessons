@@ -54,7 +54,7 @@ void configure_ADC (void){
 // Interrupt Handler
 
 void _int_(27) isr_adc(void){   // Replace VECTOR by the A/D vector number - see "PIC32 family data sheet" (pages 74-76)
-    // Read 8 samples (ADC1BUF0, ..., ADC1BUF7) and calculate average
+    // Read 8 samples
     int *p = (int *)(&ADC1BUF0);
     int i;
     int average = 0;
@@ -70,3 +70,20 @@ void _int_(27) isr_adc(void){   // Replace VECTOR by the A/D vector number - see
     // Reset AD1IF flag
     IFS1bits.AD1IF = 0;
 }
+
+/*
+delay:
+for:        ble     $a0,$0,endfor
+            li      $v0,resetCoreTimer
+            syscall
+
+while:      li      $v0,readCoreTimer
+            syscall
+            blt     $v0,20000,while
+            
+            addi    $a0,$a0,-1
+            j       for
+endfor:
+            jr      $ra
+            
+*/
