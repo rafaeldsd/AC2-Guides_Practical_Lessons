@@ -12,12 +12,19 @@ void main(void){
 
     while(1){
         // Read RD8 and assign it to RE0
-        if(PORTDbits.RD8 == 1){
+        if(PORTDbits.RD8 == 0){
             LATEbits.LATE0 = 1;
             delay(3000);
         }
         else{
             LATEbits.LATE0 = 0;
         }
+    }
+}
+
+void delay(int ms){
+    for(; ms > 0; ms--){
+        resetCoreTimer();
+        while(readCoreTimer() < 20000);
     }
 }
