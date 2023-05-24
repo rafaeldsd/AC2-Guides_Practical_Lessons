@@ -31,9 +31,10 @@ int main(void){
     EnableInterrupts();
 
     while (1){
+        // wait 100ms 
         delay(100);
-        AD1CON1bits.ASAM = 1;
-		while (IFS1bits.AD1IF == 0);
+        AD1CON1bits.ASAM = 1; // Start conversion
+		while (IFS1bits.AD1IF == 0); // Wait while conversion not done (AD1IF == 0)
         int sum = 0;
         int *p = (int *)(&ADC1BUF0);
         int i;
@@ -60,27 +61,27 @@ void send2displays(unsigned char value){
     if (displayFlag == 0){
         LATDbits.LATD5 = 1;
         LATDbits.LATD6 = 0;
-        LATB = (LATB & 0x80FF) | dl[display7codes] << 8;
+        LATB = (LATB & 0x80FF) | display7codes[dl] << 8;
     }
     else{
         LATDbits.LATD5 = 0;
         LATDbits.LATD6 = 1;
-        LATB = (LATB & 0x80FF) | dh[display7codes] << 8;
+        LATB = (LATB & 0x80FF) | display7codes[dh] << 8;
     }
     displayFlag = !displayFlag;
 }
 
-void toBCD( unsigned char value){
-    return ((value/10)<<4)+(value%10)
+unsigned char toBCD( unsigned char value){
+    return ((value/10)<<4)+(value%10);  
 }
 
-// (0 a 3.3V) -> (20 a 65ºC)
-// y = 1.36x + 0.5
+// (0 a 3.3V) -> (0 a 45º) -> (20 a 65º)
+
 
 int voltageConversion(int voltage){
-    int temp = ((voltage * 33 + 511) / 1024);
-    int aux = 1.36*temp + 0.5;
-    return aux+20;
+    int temp = ((voltage * 33 + 511) / 1023);
+    int aux = (temp * (45/3.3)) + 20;
+    return aux;
 
 }
 
