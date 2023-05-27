@@ -33,7 +33,7 @@ int main(void)
     return 0;
 } 
 
-void _int_(VECTOR_UART2) isr_uart2(void)
+void _int_(32) isr_uart2(void)
 {
     if (IFS1bits.U2RXIF == 1)
     {
