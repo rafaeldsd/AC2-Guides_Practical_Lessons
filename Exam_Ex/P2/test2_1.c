@@ -4,14 +4,13 @@ int main(void){
     // Config I/O
     TRISB = TRISB | 0x0009;
 
-    T3CONbits.TCKPS = 1; // 1:2
-    PR3 = 35714; // Fout = 20MHz / (2 * (35714 + 1)) = 280 Hz
+    T3CONbits.TCKPS = 1; // 1:2 => 20MHz / (x * 65536) = 280
+    PR3 = 35714; // Fout = 20MHz / (2 * (x + 1)) = 280 Hz
     TMR3 = 0; // Reset timer T3 count register
     T3CONbits.TON = 1; // Enable timer T3
 
     OC2CONbits.OCM = 6; // PWM mode on OCx; fault pin disabled
-    OC2CONbits.OCTSEL = 1;// Use timer T2 as the time base for PWM generation
-    OC2RS = 12500; // Ton constant
+    OC2CONbits.OCTSEL = 1;// Use timer T3 as the time base for PWM generation
     OC2CONbits.ON = 1; // Enable OC2 module
     int value;
 

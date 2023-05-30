@@ -17,9 +17,10 @@ int main(void){
     U2STAbits.UART = 1;
 
     // Config Interrupts
+    IEC1bits.U2RXIE = 1;
+    IEC1bits.U2TXIE = 0;
     IPC8bits.U2IP = 1;
     IFS1bits.U2RXIF = 0;
-	IEC1bits.U2RXIE = 1;
 	U2STAbits.URXISEL = 00;
 
     EnableInterrupts();

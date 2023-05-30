@@ -83,7 +83,7 @@ int voltageConversion(int value){
     return temp;
 }
 
-void _int_(8) isr_adc(void) {
+void _int_(8) isr_t2(void) {
     send2displays(toBcd(voltage));
     IFS0bits.T2IF = 0;
 }
